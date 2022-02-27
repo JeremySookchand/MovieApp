@@ -8,8 +8,11 @@ namespace MovieApp.Models
 {
     public class Customer
     {
+        
         public int Id { get; set; }
-        [Required]
+
+        [Required(ErrorMessage ="please enter customer name")]
+       
         [StringLength(255)]
         public string Name { get; set; }
         public bool IsSubscribedToNewsletter { get; set; }
@@ -18,7 +21,9 @@ namespace MovieApp.Models
         [Display(Name="Membership Type") ]
         public byte MembershipTypeId { get; set; }
 
+
         [Display(Name ="Date of birth")]
+        [Min18YearsIfAMember]
         public DateTime? Birthdate { get; set; }
     }
 }

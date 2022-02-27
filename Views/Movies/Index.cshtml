@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<MovieApp.Models.Movie>
+   
 
 @{
     ViewBag.Title = "Movies";
@@ -6,6 +7,10 @@
 }
 
 <h2>Movies</h2>
+<p>
+    @Html.ActionLink("New Movie", "MovieForm", "Movies", null, new { @class = "btn btn-primary" })
+</p>
+
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
@@ -17,8 +22,9 @@
         @foreach (var movie in Model)
         {
             <tr>
-                <th>@movie.Name</th>
-                <th>@movie.genre</th>
+                <td>@Html.ActionLink(movie.Name, "Edit", "Movies", new { id = movie.Id }, null)</td>
+
+               <th>@movie.Genre.Name</th>
             </tr>
         }
     </tbody>
