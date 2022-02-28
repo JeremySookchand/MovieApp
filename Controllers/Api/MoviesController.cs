@@ -7,6 +7,7 @@ using System.Web.Http;
 using AutoMapper;
 using MovieApp.Dtos;
 using MovieApp.Models;
+using System.Data.Entity;
 
 namespace MovieApp.Controllers.Api
 
@@ -20,36 +21,37 @@ namespace MovieApp.Controllers.Api
             _context = new MovieContext();
         }
         // GET /api/Movies
-        public IEnumerable<MovieDto> GetMovies()
+       // public IEnumerable<MovieDto> GetMovies(string query = null)
+        //{
+          //  var moviesQuery = _context.Movies
+            //    .Include(m => m.Genre)
+              //  .Where(m => m.NumberAvailable > 0);
+
+            //if (!String.IsNullOrWhiteSpace(query))
+              //  moviesQuery = moviesQuery.Where(m => m.Name.Contains(query));
+
+            //return moviesQuery
+              //  .ToList()
+                //.Select(Mapper.Map<Movie, MovieDto>);
+        //}
+        public IHttpActionResult GetMovie()
         {
-            return _context.Movies.ToList().Select(Mapper.Map<Movie, MovieDto>);
-            //  var moviesQuery = _context.Movies
-            //     .Include(m => m.Genre)
-            //      .Where(m => m.NumberAvailable > 0);
+            //var movie = _context.Movies.SingleOrDefault(c => c.Id == id);
 
-            //  if (!String.IsNullOrWhiteSpace(query))
-            //      moviesQuery = moviesQuery.Where(m => m.Name.Contains(query));
+            //            if (movie == null)
+            //              return NotFound();
 
-            //   return moviesQuery
-            //    .ToList()
-            //     .Select(Mapper.Map<Movie, MovieDto>);
+            //        return Ok(Mapper.Map<Movie, MovieDto>(movie));
+            var movieDtos = _context.Movies
+                      .Include(c => c.Genre)
+                      .ToList()
+                      .Select(Mapper.Map<Movie, MovieDto>);
+
+            return Ok(movieDtos);
         }
 
 
-
-        //get /api/movies/1
-        public IHttpActionResult GetMovie(int id)
-        {
-            var movie = _context.Movies.SingleOrDefault(c => c.Id == id);
-
-            if (movie == null)
-                return NotFound();
-
-            return Ok(Mapper.Map<Movie, MovieDto>(movie));
-        }
-
-
-        // POST /api/movies
+        // POST /api/movies/1
         [HttpPost]
       // [Authorize(Roles = RoleName.CanManageMovies)]
         public IHttpActionResult CreateMovie(MovieDto movieDto)
